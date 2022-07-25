@@ -22,13 +22,13 @@ public class AttractionsSearchTest extends BaseTest {
         int amountOfPages = (int) Math.ceil((double) searchResultPage.getResultsAmount() / searchResultPage.getPaginationValue());
 
         SoftAssert softAss = new SoftAssert();
-        for (int i = 1; i < amountOfPages; i++) {
+        for (int i = 1; i <= amountOfPages; i++) {
             List<AttractionsSearchResultCard> cards = searchResultPage.getSearchResults();
             for (AttractionsSearchResultCard card : cards) {
                 String assertionErrorText = String.format("'%s' card at page %s location is invalid", card.getTitleText(), i);
                 softAss.assertEquals(card.getLocationText(), destination, assertionErrorText);
             }
-            if (i != amountOfPages - 1)
+            if (i != amountOfPages)
                 searchResultPage.clickNextPageButton();
         }
         softAss.assertAll();

@@ -29,13 +29,13 @@ public class StaysSearchTest extends BaseTest {
 
         SoftAssert softAss = new SoftAssert();
 
-        for (int i = 1; i < amountOfPages; i++) {
+        for (int i = 1; i <= amountOfPages; i++) {
             List<StaysSearchResultCard> cards = searchResultPage.getSearchResults();
             for (StaysSearchResultCard card : cards) {
                 softAss.assertTrue(card.getLocationText().contains(destination), String.format("Card at %s page location is invalid", i));
                 softAss.assertTrue(card.getNightsText().contains(expectedNights), String.format("Card at %s page nights is invalid", i));
             }
-            if (i != amountOfPages - 1)
+            if (i != amountOfPages)
                 searchResultPage.clickNextPageButton();
         }
 
