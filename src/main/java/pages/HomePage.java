@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -10,8 +11,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
-public class HomePage extends BasePage{
+public class HomePage extends BasePage {
     private static final String HOMEPAGE_URL = "https://www.booking.com";
+    private final By headerNavigation = By.xpath("//header//ul[@class='bui-tab__nav']");
     private final By destinationField = By.id("ss");
     private final By destinationSelect = By.cssSelector("ul[role='listbox']>li");
     private final By searchButton = By.cssSelector(".sb-searchbox__button");
@@ -20,17 +22,16 @@ public class HomePage extends BasePage{
     private final By calendarNextButton = By.xpath("//div[@data-bui-ref='calendar-next']");
     private final By calendarTable = By.cssSelector(".bui-calendar__dates");
 
-
-    public HomePage(WebDriver driver){
+    public HomePage(WebDriver driver) {
         super(driver);
     }
 
-    public HomePage openPage(){
+    public HomePage openPage() {
         driver.get(HOMEPAGE_URL);
         return this;
     }
 
-    public HomePage enterDestination(String destination){
+    public HomePage enterDestination(String destination) {
         driver.findElement(destinationField).sendKeys(destination);
 
         WebElement destinationFieldSelect = new WebDriverWait(driver, Duration.ofSeconds(5))
@@ -51,24 +52,36 @@ public class HomePage extends BasePage{
         return this;
     }
 
-    public SearchResultPage clickSearchButton(){
+    public StaysSearchResultPage clickSearchButton() {
         driver.findElement(searchButton).click();
-        return new SearchResultPage(this.driver);
+        return new StaysSearchResultPage(this.driver);
     }
 
-    private int calculateMonthDifference(LocalDate date1, LocalDate date2){
+    public BasePage clickNavigationButton(String navigationText) {
+        WebElement navigationBar = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(headerNavigation));
+        switch (navigationText) {
+            case "Attractions":
+                navigationBar.findElement(By.xpath(String.format(".//span[@class='bui-tab__text' and contains(text(),'%s')]", navigationText))).click();
+                return new AttractionsPage(driver);
+            default:
+                throw new RuntimeException("No such element in navigation bar");
+        }
+    }
+
+    private int calculateMonthDifference(LocalDate date1, LocalDate date2) {
         return Math.max(date1.getMonthValue(), date2.getMonthValue()) - Math.min(date1.getMonthValue(), date2.getMonthValue());
     }
 
-    private void moveToNextMonth(int times){
+    private void moveToNextMonth(int times) {
         WebElement nextButton = driver.findElement(calendarNextButton);
-        for(int i = 0; i < times;i++){
+        for (int i = 0; i < times; i++) {
             nextButton.click();
             new WebDriverWait(driver, Duration.ofSeconds(1)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(calendar));
         }
     }
 
-    private void clickGivenDay(List<WebElement> elementList, String dayOfMonth){
+    private void clickGivenDay(List<WebElement> elementList, String dayOfMonth) {
         elementList.stream()
                 .filter(el -> el.getText().contains(dayOfMonth))
                 .findFirst()

@@ -1,23 +1,23 @@
-package pages;
+package components;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class SearchResultCard {
+public class StaysSearchResultCard {
 
     private WebElement card;
     private final By cardAddress = By.xpath(".//span[@data-testid='address']");
     private final By cardNights = By.xpath(".//div[@data-testid='price-for-x-nights']");
 
-    public SearchResultCard(WebElement card) {
+    public StaysSearchResultCard(WebElement card) {
         this.card = card;
     }
 
-    public String getLocationText(){
+    public String getLocationText() {
         return card.findElement(cardAddress).getText();
     }
 
-    public String getNightsText(){
+    public String getNightsText() {
         return card.findElement(cardNights).getText();
     }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Suite">
 
-    <test name="All tests">
+    <test name="All tests" parallel="methods" thread-count="2">
         <packages>
             <package name="com.*"/>
         </packages>

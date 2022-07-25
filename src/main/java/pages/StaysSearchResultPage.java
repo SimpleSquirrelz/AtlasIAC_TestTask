@@ -1,5 +1,6 @@
 package pages;
 
+import components.StaysSearchResultCard;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchResultPage extends BasePage {
+public class StaysSearchResultPage extends BasePage {
 
     private final String SEARCH_URL = "https://www.booking.com/searchresults.html";
 
@@ -19,11 +20,11 @@ public class SearchResultPage extends BasePage {
     private final By overlayCard = By.xpath("//*[@data-testid='overlay-card']");
     private final By lastPageButton = By.xpath("(//div[@data-testid='pagination']//ol//li//button)[last()]");
 
-    public SearchResultPage(WebDriver driver){
+    public StaysSearchResultPage(WebDriver driver) {
         super(driver);
     }
 
-    public SearchResultPage clickNextPageButton(){
+    public StaysSearchResultPage clickNextPageButton() {
         driver.findElement(nextPageButton).click();
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(overlayCard));
@@ -31,14 +32,14 @@ public class SearchResultPage extends BasePage {
         return this;
     }
 
-    public List<SearchResultCard> getSearchResults() {
+    public List<StaysSearchResultCard> getSearchResults() {
         return new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(searchResultCard))
-                .stream().map(SearchResultCard::new)
+                .stream().map(StaysSearchResultCard::new)
                 .collect(Collectors.toList());
     }
 
-    public int getAmountOfPages(){
+    public int getAmountOfPages() {
         return Integer.parseInt(driver.findElement(lastPageButton).getText());
     }
 
